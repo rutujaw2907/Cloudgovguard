@@ -1,0 +1,10 @@
+policy_id: NET002
+name: Block Public RDP
+framework: CIS
+control_id: CIS-4.2
+severity: CRITICAL
+resource: security_rule
+condition:
+  port: 3389
+  source: "0.0.0.0/0"
+remediation: Restrict RDP access to trusted administrative IP addresses only.

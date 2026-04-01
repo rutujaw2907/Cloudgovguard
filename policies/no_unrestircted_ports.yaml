@@ -1,0 +1,9 @@
+policy_id: NET003
+name: No Unrestricted Ports
+framework: CIS
+control_id: CIS-4.3
+severity: HIGH
+resource: security_rule
+condition:
+  source: "0.0.0.0/0"
+remediation: Avoid exposing services publicly unless strictly required.

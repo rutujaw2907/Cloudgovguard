@@ -1,0 +1,9 @@
+policy_id: IAM001
+name: No Broad Admin Policy
+framework: CIS
+control_id: CIS-1.2
+severity: HIGH
+resource: iam_policy
+condition:
+  statement_contains: "manage all-resources"
+remediation: Replace broad admin permissions with least-privilege policies.

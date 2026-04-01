@@ -1,0 +1,9 @@
+policy_id: STO001
+name: Bucket Must Not Be Public
+framework: CIS
+control_id: CIS-3.1
+severity: HIGH
+resource: bucket
+condition:
+  public_access_type: "ObjectRead"
+remediation: Disable public object access on the bucket.

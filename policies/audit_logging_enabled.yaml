@@ -1,0 +1,9 @@
+policy_id: LOG001
+name: Audit Logging Must Be Enabled
+framework: CIS
+control_id: CIS-5.1
+severity: HIGH
+resource: audit_log
+condition:
+  enabled: false
+remediation: Enable OCI audit logging for all critical compartments.

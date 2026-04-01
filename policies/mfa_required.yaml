@@ -1,0 +1,9 @@
+policy_id: IAM002
+name: MFA Required For IAM Users
+framework: CIS
+control_id: CIS-1.1
+severity: MEDIUM
+resource: iam_user
+condition:
+  mfa_enabled: false
+remediation: Enable MFA for all IAM users.

@@ -1,0 +1,9 @@
+policy_id: STO002
+name: Bucket Encryption Required
+framework: CIS
+control_id: CIS-3.2
+severity: MEDIUM
+resource: bucket
+condition:
+  kms_key_id: null
+remediation: Enable bucket encryption using a customer-managed or default key.

@@ -1,0 +1,6 @@
+oci
+Flask
+PyYAML
+pandas
+networkx
+matplotlib
