@@ -1,0 +1,56 @@
+[
+  {
+    "provider": "oracle",
+    "resource_type": "iam_user",
+    "resource_name": "mansib0426@gmail.com",
+    "mfa_enabled": false
+  },
+  {
+    "provider": "oracle",
+    "resource_type": "iam_policy",
+    "resource_name": "Tenant Admin Policy",
+    "statements": [
+      "ALLOW GROUP Administrators to manage all-resources IN TENANCY"
+    ]
+  },
+  {
+    "provider": "oracle",
+    "resource_type": "iam_policy",
+    "resource_name": "user-man-policy",
+    "statements": [
+      "Allow group 'Default'/'Administrators' to manage users in tenancy"
+    ]
+  },
+  {
+    "provider": "oracle",
+    "resource_type": "security_rule",
+    "resource_name": "Default Security List for CloudGovGuard-VCN",
+    "source": "0.0.0.0/0",
+    "protocol": "6",
+    "port": 22
+  },
+  {
+    "provider": "oracle",
+    "resource_type": "security_rule",
+    "resource_name": "Default Security List for CloudGovGuard-VCN",
+    "source": "0.0.0.0/0",
+    "protocol": "1",
+    "port": null
+  },
+  {
+    "provider": "oracle",
+    "resource_type": "security_rule",
+    "resource_name": "Default Security List for CloudGovGuard-VCN",
+    "source": "10.0.0.0/16",
+    "protocol": "1",
+    "port": null
+  },
+  {
+    "provider": "oracle",
+    "resource_type": "security_rule",
+    "resource_name": "Default Security List for CloudGovGuard-VCN",
+    "source": "0.0.0.0/0",
+    "protocol": "6",
+    "port": 22
+  }
+]
