@@ -1,76 +1,75 @@
 def normalize_users(users):
-    result = []
-
+    normalized = []
     for user in users:
-        result.append({
+        normalized.append({
             "provider": "oracle",
             "resource_type": "iam_user",
             "resource_name": user.name,
-            "mfa_enabled": False  # OCI limitation (keep for policy engine)
+            "mfa_enabled": None,
+            "description": getattr(user, "description", "")
         })
-
-    return result
+    return normalized
 
 
 def normalize_policies(policies):
-    result = []
-
+    normalized = []
     for policy in policies:
-        result.append({
+        statements = getattr(policy, "statements", [])
+        normalized.append({
             "provider": "oracle",
             "resource_type": "iam_policy",
             "resource_name": policy.name,
-            "statements": policy.statements
+            "statements": statements
         })
-
-    return result
+    return normalized
 
 
 def normalize_security_lists(security_lists):
-    result = []
+    normalized = []
+    for sec_list in security_lists:
+        ingress_rules = getattr(sec_list, "ingress_security_rules", [])
+        for rule in ingress_rules:
+            source = getattr(rule, "source", None)
+            protocol = getattr(rule, "protocol", None)
 
-    for sec in security_lists:
-        rules = sec.ingress_security_rules or []
+            port_min = None
+            port_max = None
 
-        for rule in rules:
-            port = None
+            if getattr(rule, "tcp_options", None):
+                port_min = getattr(rule.tcp_options, "destination_port_range", None).min \
+                    if getattr(rule.tcp_options, "destination_port_range", None) else None
+                port_max = getattr(rule.tcp_options, "destination_port_range", None).max \
+                    if getattr(rule.tcp_options, "destination_port_range", None) else None
 
-            if rule.tcp_options and rule.tcp_options.destination_port_range:
-                port = rule.tcp_options.destination_port_range.min
-
-            result.append({
+            normalized.append({
                 "provider": "oracle",
                 "resource_type": "security_rule",
-                "resource_name": sec.display_name,
-                "source": rule.source,
-                "protocol": rule.protocol,
-                "port": port
+                "resource_name": sec_list.display_name,
+                "source": source,
+                "protocol": protocol,
+                "port": port_min,
+                "port_range_max": port_max
             })
-
-    return result
+    return normalized
 
 
 def normalize_buckets(buckets):
-    result = []
-
+    normalized = []
     for bucket in buckets:
-        result.append({
+        normalized.append({
             "provider": "oracle",
             "resource_type": "bucket",
             "resource_name": bucket.name,
-            "public_access": bucket.public_access_type,
-            "encrypted": bucket.kms_key_id is not None
+            "public_access_type": getattr(bucket, "public_access_type", "Unknown"),
+            "kms_key_id": getattr(bucket, "kms_key_id", None)
         })
-
-    return result
+    return normalized
 
 
 def normalize_all(raw):
     resources = []
-
-    resources += normalize_users(raw.get("users", []))
-    resources += normalize_policies(raw.get("policies", []))
-    resources += normalize_security_lists(raw.get("security_lists", []))
-    resources += normalize_buckets(raw.get("buckets", []))
-
+    resources.extend(normalize_users(raw.get("users", [])))
+    resources.extend(normalize_policies(raw.get("policies", [])))
+    resources.extend(normalize_security_lists(raw.get("security_lists", [])))
+    resources.extend(normalize_buckets(raw.get("buckets", [])))
     return resources
