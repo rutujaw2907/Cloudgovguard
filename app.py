@@ -1,45 +1,40 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from app.db import get_connection
 
 app = Flask(__name__)
 
-# ---------------- RESOURCES ----------------
+@app.route("/")
+def home():
+    return render_template("index.html")
+
 @app.route("/api/resources")
 def get_resources():
     conn = get_connection()
     cur = conn.cursor()
-
     cur.execute("SELECT COUNT(*) as count FROM resources")
     row = cur.fetchone()
-
     conn.close()
 
     return jsonify({
         "total_resources": row["count"] if row else 0
     })
 
-# ---------------- VIOLATIONS ----------------
 @app.route("/api/violations")
 def get_violations():
     conn = get_connection()
     cur = conn.cursor()
-
     cur.execute("SELECT * FROM violations")
     rows = cur.fetchall()
-
     conn.close()
 
     return jsonify([dict(r) for r in rows] if rows else [])
 
-# ---------------- SCORE ----------------
 @app.route("/api/score")
 def get_score():
     conn = get_connection()
     cur = conn.cursor()
-
     cur.execute("SELECT * FROM scores ORDER BY id DESC LIMIT 1")
     row = cur.fetchone()
-
     conn.close()
 
     if not row:
@@ -59,6 +54,5 @@ def get_score():
         "low": row["low_count"]
     })
 
-# ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run(debug=True)

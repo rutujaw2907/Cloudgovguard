@@ -17,22 +17,12 @@ def resource_matches_policy(resource, policy):
     return True
 
 
-def evaluate_resources(resources, policies):
+def evaluate_policy(normalized, policies):
     violations = []
 
-    for resource in resources:
+    for resource in normalized:
         for policy in policies:
-            if resource_matches_policy(resource, policy):
-                violations.append({
-                    "policy_id": policy["policy_id"],
-                    "policy_name": policy["name"],
-                    "framework": policy["framework"],
-                    "control_id": policy["control_id"],
-                    "severity": policy["severity"],
-                    "resource_name": resource.get("resource_name"),
-                    "resource_type": resource.get("resource_type"),
-                    "reason": f"Resource matched condition: {policy.get('condition')}",
-                    "remediation": policy["remediation"]
-                })
+            # add your checking logic here
+            pass
 
     return violations
